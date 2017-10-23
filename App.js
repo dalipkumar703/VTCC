@@ -2,65 +2,98 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 //import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
-import {TouchableOpacity,TextInput} from 'react-native';
-import { Form,
-  Separator,InputField, LinkField,
-  SwitchField, PickerField,DatePickerField,TimePickerField
-} from 'react-native-form-generator';
-
-
+import {TouchableHighlight,TextInput} from 'react-native';
+import signUp from './api/auth';
+import {Button, Container, Header, Content, Form, Item, Input, Label } from 'native-base';
 export default class App extends React.Component {
     constructor(props){
     super(props);
-    this.state = {
-     formData:{}
-   }
-
+    this.state={
+      name:"",
+      email:"",
+      password:"",
+      formError:{name:"",email:"",password:""}
     }
-    handleFormChange(formData){
-    /*
-    formData will contain all the values of the form,
-    in this example.
-
-    formData = {
-    first_name:"",
-    last_name:"",
-    gender: '',
-    birthday: Date,
-    has_accepted_conditions: bool
+    this.onPress.bind(this);
     }
-    */
+    onPress()
+    {
+      console.log("helo");
+    }
 
-    this.setState({formData:formData})
-    this.props.onFormChange && this.props.onFormChange(formData);
-  }
-  handleFormFocus(e, component){
-    //console.log(e, component);
-  }
-  openTermsAndConditionsURL(){
-
-  }
 
   render() {
     return (
       <View style={styles.container}>
-      <Form
-        ref='registrationForm'
-        onFocus={this.handleFormFocus.bind(this)}
-        onChange={this.handleFormChange.bind(this)}
-        label="Personal Information">
-        <Separator />
-<InputField ref="first_name" style={{
-  width:350,
-  height:50
-}} placeholder="Username" label="Username"/>
-       <Separator/>
-      <InputField ref="email" style={styles.inputField} placeholder="email" label="Email"/>
-       <Separator/>
-      <InputField ref="password" style={styles.inputField} placeholder="password" label="Password"/>
+      <Container>
+      <Header />
+      <Content>
+        <Form>
+            <Item stackedLabel>
+            <Label>Username</Label>
+            <Input onChangeText={(text)=>{
+                 if(/^[a-z0-9]+$/.test(text))
+                 {
+                  this.setState({name:text});
+                 }
+              else {
+              this.setState({formError:{name:"Only character and number is allowed",email:this.state.formError.email,password:this.state.formError.password}});
+                         }
 
-          </Form>
-        <Text>{JSON.stringify(this.state.formData)}</Text>
+            }}/>
+          </Item>
+          <Text>{this.state.formError.name}</Text>
+          <Item stackedLabel last>
+            <Label>Email</Label>
+            <Input onChangeText={(text)=>{
+                   console.log("text:",text);
+                   if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(text))
+                   {
+                    this.setState({email:text});
+                    this.setState({formError:{name:this.state.formError.name,email:"",password:this.state.formError.password}});
+
+                  console.log("right");
+                   }
+                else {
+                this.setState({formError:{name:this.state.formError.name,email:"Email is not correct",password:this.state.formError.password}});
+                  console.log("wrong",this.state);
+                           }
+            }} />
+
+          </Item>
+          <Text>{this.state.formError.email}</Text>
+          <Item stackedLabel last>
+            <Label>Password</Label>
+            <Input secureTextEntry={true}  onChangeText={(password)=>{
+              console.log("password:",password);
+              if(password.length>=6)
+              {
+                console.log("right");
+                this.setState({password:password});
+                this.setState({formError:{name:this.state.formError.name,email:this.state.formError.email,password:""}});
+
+              }
+              else {
+                console.log("wrong");
+                this.setState({formError:{name:this.state.formError.name,email:this.state.formError.email,password:"Password should be 6 character"}});
+              }
+            }}/>
+          </Item>
+         <Text>{this.state.formError.password}</Text>
+          <Button onPress={()=>{
+           signUp(this.state.name,this.state.email,this.state.password).then((res)=>{
+             console.log("res:",res);
+           })
+
+           console.log("done");
+
+          }} block info>
+            <Text>Submit</Text>
+          </Button>
+        </Form>
+      </Content>
+    </Container>
+
      </View>
     );
   }
@@ -72,14 +105,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  inputField : {
-    flex:1,
-    width:400
-  },
-  buttonSubmit :{
-    backgroundColor:'#b3d9ff',
-    color:'#fff',
-    fontSize:25
   }
 });
