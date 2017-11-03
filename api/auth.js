@@ -2,7 +2,7 @@
 
 export default async function signUp(name,email,password){
   try {
-     let response = await fetch('https://5a377e86.ngrok.io/api/userSubmit',{
+     let response = await fetch('https://0b380155.ngrok.io/api/userSubmit',{
        method:'POST',
        headers: {
     'Accept': 'application/json',
