@@ -8,6 +8,7 @@ import signUp from '../api/auth';
 import store from '../store';
 import  * as Login from '../actions/loginAction';
 import {Button, Container, Header, Content, Form, Item, Input, Label } from 'native-base';
+import {NavigationActions} from 'react-navigation';
 export default class SignUp extends React.Component {
     constructor(props){
     super(props);
@@ -90,7 +91,7 @@ export default class SignUp extends React.Component {
             console.log("res:",res);
            store.dispatch(Login.loginSuccessfully(res));
 
-            this.props.navigation.navigate('Home');
+            this.props.navigation.dispatch(resetAction);
           })
 
           console.log("done");
@@ -107,7 +108,12 @@ export default class SignUp extends React.Component {
     );
   }
 }
-
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Home'})
+  ]
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

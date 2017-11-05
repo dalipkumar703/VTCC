@@ -6,8 +6,8 @@ const login=(state=[],action)=>{
     return [
       ...state,
       {
-        id: action.object.id,
-        name: action.object.name
+        name: action.object.name,
+        email: action.object.email
       }
     ]
     default :
