@@ -1,0 +1,5 @@
+rootProject.name = 'vfc'
+include ':rn-camera-roll'
+project(':rn-camera-roll').projectDir = new File(rootProject.projectDir, '../node_modules/rn-camera-roll/android')
+
+include ':app'

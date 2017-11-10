@@ -6,6 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import {Provider} from 'react-redux';
 import store from './store';
 import AppContainer from './containers';
+//import {Root} from 'native-base';
 //import  * as Login from './actions/loginAction';
 //import {Button, Container, Header, Content, Form, Item, Input, Label } from 'native-base';
 export default class App extends React.Component {
@@ -15,7 +16,9 @@ export default class App extends React.Component {
     return (
 
      <Provider store={store}>
+//<Root>
      <AppContainer />
+//</Root>
   </Provider>
     );
   }
